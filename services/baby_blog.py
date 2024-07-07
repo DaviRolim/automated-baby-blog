@@ -1,5 +1,6 @@
 import asyncpg
 import datetime
+import os
 async def create_blog_post(topic: str, crew):
     print(f"Creating blog post for {topic}")
     crew_result = crew.run(topic)
@@ -12,7 +13,7 @@ async def create_blog_post(topic: str, crew):
     image_url = crew_result.split("![image]")[1].split("\n")[0].replace("(", "").replace(")", "")
     print(f"Image URL: {image_url}")
 
-    conn = await asyncpg.connect('postgresql://postgres:postgres@db:5432/testdb')
+    conn = await asyncpg.connect(f"{os.environ['DATABASE_URI']}")
     print("Connected")
     print(conn)
     await conn.execute('''

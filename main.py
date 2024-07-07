@@ -1,11 +1,11 @@
-from dotenv import load_dotenv
+import os
 
 from services.baby_blog import create_blog_post
 from services.baby_blog_crew import BabyBlogCrew
+from dotenv import load_dotenv
 load_dotenv()
 
 import asyncpg
-import datetime
 from fastapi import FastAPI
 from pydantic import BaseModel
 
@@ -18,7 +18,7 @@ crew = BabyBlogCrew()
 
 @app.on_event("startup")
 async def startup_event():
-    conn = await asyncpg.connect('postgresql://postgres:postgres@db:5432/testdb')
+    conn = await asyncpg.connect(f"{os.environ['DATABASE_URI']}")
     await conn.execute('''
         CREATE TABLE IF NOT EXISTS posts(
             id serial PRIMARY KEY,
